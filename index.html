@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #0A192F;
+            --light-blue: #E6F1FF;
+            --electric-blue: #00A8E8;
+            --cream: #FAF9F6;
+            --coral: #FF6B6B;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--light-blue);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--coral);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--light-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--electric-blue);
+            background: rgba(0, 168, 232, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--electric-blue);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 80%;
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--light-blue);
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 80px;
+        }
+
+        .page {
+            display: none;
+            min-height: calc(100vh - 80px);
+            padding: 2rem 0;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--navy) 0%, rgba(0, 168, 232, 0.1) 100%);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--light-blue);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--electric-blue);
+            color: var(--navy);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 168, 232, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 168, 232, 0.6);
+            background: var(--coral);
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--coral);
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            width: 80px;
+            height: 3px;
+            background: var(--electric-blue);
+            transform: translateX(-50%);
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: rgba(230, 241, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 168, 232, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 168, 232, 0.2);
+            border-color: var(--electric-blue);
+        }
+
+        .card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--electric-blue);
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            color: var(--light-blue);
+            margin-bottom: 1rem;
+        }
+
+        .card .meta {
+            color: var(--coral);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Contact Icons */
+        .contact-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+
+        /* Mouse Cursor Animation */
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: var(--electric-blue);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.6;
+            transform: translate(-50%, -50%);
+            transition: all 0.1s ease-out;
+        }
+
+        .cursor-trail::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 168, 232, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.4;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.8;
+            }
+        }
+
+        /* Hide cursor trail on mobile */
+        @media (max-width: 768px) {
+            .cursor-trail {
+                display: none;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--electric-blue);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(0, 168, 232, 0.3);
+            border-radius: 8px;
+            background: rgba(10, 25, 47, 0.5);
+            color: var(--light-blue);
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--electric-blue);
+            box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.1);
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--electric-blue);
+            color: var(--navy);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: var(--coral);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 25, 47, 0.9);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(0, 168, 232, 0.3);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            color: var(--electric-blue);
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: rgba(0, 168, 232, 0.1);
+        }
+
+        .social-links a:hover {
+            color: var(--coral);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 25, 47, 0.98);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <a href="#" class="logo">Your Name</a>
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#experience" class="nav-link">Experience</a></li>
+                    <li><a href="#education" class="nav-link">Education</a></li>
+                    <li><a href="#achievements" class="nav-link">Achievements</a></li>
+                    <li><a href="#references" class="nav-link">References</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Mouse Cursor Trail -->
+        <div class="cursor-trail"></div>
+        
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <div class="container">
+                    <h1>Welcome to My Portfolio</h1>
+                    <p>I'm a passionate professional dedicated to creating exceptional digital experiences and driving innovation in everything I do.</p>
+                    <a href="#contact" class="cta-button">Get In Touch</a>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="container">
+                    <h2 class="section-title">About Me</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <h3>Creative Vision</h3>
+                            <p>I bring innovative solutions to complex problems through creative thinking and strategic planning. My approach combines technical expertise with artistic vision.</p>
+                        </div>
+                        <div class="card">
+                            <h3>Technical Excellence</h3>
+                            <p>With a strong foundation in modern technologies and best practices, I deliver high-quality solutions that exceed expectations.</p>
+                        </div>
+                        <div class="card">
+                            <h3>Collaborative Spirit</h3>
+                            <p>I believe in the power of teamwork and open communication to achieve remarkable results and foster positive working relationships.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experience Page -->
+        <div id="experience" class="page">
+            <div class="section">
+                <div class="container">
+                    <h2 class="section-title">Professional Experience</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <h3>Senior Developer</h3>
+                            <p>Led development teams in creating scalable web applications and implementing best practices for code quality and performance optimization.</p>
+                            <div class="meta">2022 - Present | Tech Company Inc.</div>
+                        </div>
+                        <div class="card">
+                            <h3>Full Stack Developer</h3>
+                            <p>Developed and maintained multiple client projects using modern frameworks and technologies, focusing on user experience and performance.</p>
+                            <div class="meta">2020 - 2022 | Digital Solutions Ltd.</div>
+                        </div>
+                        <div class="card">
+                            <h3>Junior Developer</h3>
+                            <p>Started my career building responsive websites and learning industry standards while contributing to team projects and client deliverables.</p>
+                            <div class="meta">2018 - 2020 | StartUp Ventures</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education Page -->
+        <div id="education" class="page">
+            <div class="section">
+                <div class="container">
+                    <h2 class="section-title">Education</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <h3>Master of Computer Science</h3>
+                            <p>Specialized in software engineering and user experience design. Graduated with honors and completed a thesis on modern web development practices.</p>
+                            <div class="meta">2016 - 2018 | University of Technology</div>
+                        </div>
+                        <div class="card">
+                            <h3>Bachelor of Science in Computer Science</h3>
+                            <p>Comprehensive foundation in computer science principles, programming languages, and software development methodologies.</p>
+                            <div class="meta">2012 - 2016 | State University</div>
+                        </div>
+                        <div class="card">
+                            <h3>Certifications</h3>
+                            <p>AWS Certified Solutions Architect, Google Cloud Professional, and various technology-specific certifications to stay current with industry trends.</p>
+                            <div class="meta">2018 - Present | Various Institutions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Page -->
+        <div id="achievements" class="page">
+            <div class="section">
+                <div class="container">
+                    <h2 class="section-title">Achievements</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <h3>Innovation Award</h3>
+                            <p>Recognized for developing an innovative solution that improved system performance by 40% and reduced costs significantly.</p>
+                            <div class="meta">2023 | Tech Company Inc.</div>
+                        </div>
+                        <div class="card">
+                            <h3>Team Leadership Excellence</h3>
+                            <p>Successfully led a team of 8 developers to deliver a complex project 2 weeks ahead of schedule while maintaining high quality standards.</p>
+                            <div class="meta">2022 | Digital Solutions Ltd.</div>
+                        </div>
+                        <div class="card">
+                            <h3>Open Source Contribution</h3>
+                            <p>Contributed to several popular open-source projects with over 1000 stars on GitHub, helping improve developer communities worldwide.</p>
+                            <div class="meta">2021 - Present | GitHub Community</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- References Page -->
+        <div id="references" class="page">
+            <div class="section">
+                <div class="container">
+                    <h2 class="section-title">References</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <h3>John Smith</h3>
+                            <p>"An exceptional developer with strong technical skills and excellent communication abilities. Always delivers high-quality work on time."</p>
+                            <div class="meta">Senior Manager | Tech Company Inc.</div>
+                        </div>
+                        <div class="card">
+                            <h3>Sarah Johnson</h3>
+                            <p>"Outstanding team player who brings innovative solutions to challenging problems. A pleasure to work with and highly recommended."</p>
+                            <div class="meta">Project Director | Digital Solutions Ltd.</div>
+                        </div>
+                        <div class="card">
+                            <h3>Michael Brown</h3>
+                            <p>"Demonstrated exceptional leadership qualities and technical expertise. Consistently exceeded expectations and mentored junior developers."</p>
+                            <div class="meta">CTO | StartUp Ventures</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact" class="page">
+            <div class="section">
+                <div class="container">
+                    <h2 class="section-title">Contact Me</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <h3>
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z" fill="#E6F1FF"/>
+                                </svg>
+                                your.email@gmail.com
+                            </h3>
+                            <p>Feel free to reach out to me via email for any professional inquiries or collaborations.</p>
+                            <div class="meta">
+                                <a href="mailto:your.email@gmail.com" style="color: var(--electric-blue); text-decoration: none;">Send Email</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" fill="#E6F1FF"/>
+                                </svg>
+                                github.com/yourusername
+                            </h3>
+                            <p>Check out my code repositories, open source contributions, and development projects.</p>
+                            <div class="meta">
+                                <a href="https://github.com/yourusername" target="_blank" style="color: var(--electric-blue); text-decoration: none;">Visit GitHub</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" fill="#E6F1FF"/>
+                                </svg>
+                                @yourusername
+                            </h3>
+                            <p>Follow my journey and get a glimpse into my creative process and daily inspiration.</p>
+                            <div class="meta">
+                                <a href="https://instagram.com/yourusername" target="_blank" style="color: var(--electric-blue); text-decoration: none;">Follow on Instagram</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="#E6F1FF"/>
+                                </svg>
+                                @yourusername
+                            </h3>
+                            <p>Connect with me for tech discussions, industry insights, and professional updates.</p>
+                            <div class="meta">
+                                <a href="https://x.com/yourusername" target="_blank" style="color: var(--electric-blue); text-decoration: none;">Follow on X</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Your Name. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation functionality
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinksContainer = document.querySelector('.nav-links');
+
+        // Page navigation
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetPage = link.getAttribute('href').substring(1);
+                
+                // Update active nav link
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Show target page
+                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById(targetPage).classList.add('active');
+                
+                // Close mobile menu if open
+                navLinksContainer.classList.remove('active');
+            });
+        });
+
+        // Mobile menu toggle
+        menuToggle.addEventListener('click', () => {
+            navLinksContainer.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('nav')) {
+                navLinksContainer.classList.remove('active');
+            }
+        });
+
+        // Smooth scrolling for CTA button
+        document.querySelector('.cta-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetPage = e.target.getAttribute('href').substring(1);
+            
+            // Update navigation
+            navLinks.forEach(l => l.classList.remove('active'));
+            document.querySelector(`[href="#${targetPage}"]`).classList.add('active');
+            
+            // Show target page
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(targetPage).classList.add('active');
+        });
+
+        // Form submission
+        // Contact page doesn't have a form anymore, so this can be removed
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(10, 25, 47, 0.98)';
+            } else {
+                nav.style.background = 'rgba(10, 25, 47, 0.95)';
+            }
+        });
+
+        // Mouse cursor trail animation
+        const cursorTrail = document.querySelector('.cursor-trail');
+        let mouseX = 0;
+        let mouseY = 0;
+        let trailX = 0;
+        let trailY = 0;
+
+        // Track mouse position
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Smooth trail animation
+        function animateTrail() {
+            trailX += (mouseX - trailX) * 0.1;
+            trailY += (mouseY - trailY) * 0.1;
+            
+            cursorTrail.style.left = trailX + 'px';
+            cursorTrail.style.top = trailY + 'px';
+            
+            requestAnimationFrame(animateTrail);
+        }
+
+        // Start animation only if cursor trail exists
+        if (cursorTrail) {
+            animateTrail();
+        }
+
+        // Add hover effects for interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .card, .nav-link, .menu-toggle');
+        
+        interactiveElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                if (cursorTrail) {
+                    cursorTrail.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                    cursorTrail.style.background = '#FF6B6B';
+                }
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                if (cursorTrail) {
+                    cursorTrail.style.transform = 'translate(-50%, -50%) scale(1)';
+                    cursorTrail.style.background = '#00A8E8';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
